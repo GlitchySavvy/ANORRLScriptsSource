@@ -16,7 +16,7 @@ pcall(function() settings().Diagnostics:LegacyScriptMode() end)
 local shouldCountDown = true
 local countdownTimer = 15
 
-local commands = {";ec", ";cock", ";raymonf", ";gage", ";minecraft", ";suicide", ";energycell", ";cancer", ";bleach", ";sex", ";kms", ";death", ";robloxsuckingpenis"}
+local commands = {";ec", ";cock", ";raymonf", ";gage", ";minecraft", ";suicide", ";energycell", ";cancer", ";bleach", ";sex", ";kms", ";death", ";robloxsuckingpenis", ";korone", ";liam", ";amir", ";brickplanet", ";polytoriacrashed"}
 
 local ecSounds = {
 	1991,
