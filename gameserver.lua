@@ -17,7 +17,7 @@ local shouldCountDown = true
 local countdownTimer = 15
 
 local commands = {";ec", ";cock", ";raymonf", ";gage", ";minecraft", ";suicide", ";energycell", ";cancer", ";bleach", ";sex", ";kms", ";death", ";robloxsuckingpenis", ";korone", ";liam", ";amir", ";brickplanet", ";polytoriacrashed", ";wm"}
-
+local elivsound = 7569
 local ecSounds = {
 	1991,
 	1993,
@@ -50,6 +50,15 @@ function onChatted(msg, speaker)
             sound:Play()
         end
     end
+	-- coded by skylerclock
+	if msg == ";eliv" and speaker.Character.Humanoid.Health > 0 then
+		speaker.Character.Humanoid.Health = 0
+		local sound = Instance.new("Sound")
+		sound.Parent = speaker.Character.Head
+		sound.SoundId = protocol .. "arl." .. baseUrl .. "/asset/?id=" .. elivSound
+		wait(0.2)
+		sound:Play()
+	end
 	if game:GetService("Players").ArbysChibkenEnabled then
 		if msg == "arbys chibken" then
 			local sound = Instance.new("Sound")
