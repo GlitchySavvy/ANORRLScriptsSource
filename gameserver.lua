@@ -1,6 +1,6 @@
 -- Start Game Script Arguments
-local placeId, port, sleeptime, access, timeout, baseUrl, libraryRegistrationScriptAssetID, universeId, assetGameSubdomain, protocol, jobId, testing =
-{placeId}, {port}, 10, "{accesskey}", 10, "lambda.cam", 37801172, {placeId}, "arl", "http://", "{jobId}", false
+local placeId, port, sleeptime, access, timeout, domain, libraryRegistrationScriptAssetID, universeId, protocol, jobId, testing =
+{placeId}, {port}, 10, "{accesskey}", 10, "{domain}", 37801172, {placeId}, "http://", "{jobId}", false
 
 -----------------------------------"CUSTOM" SHARED CODE----------------------------------
 local TeleportService = game:GetService("TeleportService")
@@ -52,7 +52,7 @@ local function onChatted(msg, speaker)
 
 			local sound = Instance.new("Sound")
 			sound.Parent = head
-			sound.SoundId = protocol .. "arl." .. baseUrl .. "/asset/?id=" .. ecSounds[math.random(1, #ecSounds)]
+			sound.SoundId = protocol .. domain .. "/asset/?id=" .. ecSounds[math.random(1, #ecSounds)]
 			wait(0.2)
 			sound:Play()
 		end
@@ -63,7 +63,7 @@ local function onChatted(msg, speaker)
 
 		local sound = Instance.new("Sound")
 		sound.Parent = head
-		sound.SoundId = protocol .. "arl." .. baseUrl .. "/asset/?id=" .. elivSound
+		sound.SoundId = protocol .. domain .. "/asset/?id=" .. elivSound
 		wait(0.2)
 		sound:Play()
 	end
@@ -138,16 +138,14 @@ end
 
 local assetId = placeId -- might be able to remove this now
 local url = nil
-local assetGameUrl = nil
 local saveUrl = nil
 local whitelist = {
 	1,
 	43,
 	62
 }
-if baseUrl~=nil and protocol ~= nil then
-	url = protocol .. "arl." .. baseUrl --baseUrl is actually the domain, no leading .
-	assetGameUrl = protocol .. assetGameSubdomain .. "." .. baseUrl
+if domain~=nil and protocol ~= nil then
+	url = protocol .. domain
 	saveUrl = url .. "/Data/Upload.ashx?assetid=" .. placeId .. "&access=" .. access
 end
 
@@ -248,12 +246,11 @@ if url~=nil then
 	if testing then
 		warn("Loading NetworkServer and data")
 	end
-	local apiProxyUrl = "http://arl." .. baseUrl -- baseUrl is really the domain
-
+	
 	pcall(function() game:GetService("Players"):SetAbuseReportUrl(url .. "/AbuseReport/InGameChatHandler.ashx") end)
-	pcall(function() game:GetService("ScriptInformationProvider"):SetAssetUrl(assetGameUrl .. "/Asset/") end)
+	pcall(function() game:GetService("ScriptInformationProvider"):SetAssetUrl(url .. "/Asset/") end)
 	pcall(function() game:GetService("ContentProvider"):SetBaseUrl(url .. "/") end)
-	pcall(function() game:GetService("Players"):SetChatFilterUrl(assetGameUrl .. "/Game/ChatFilter.ashx") end)
+	pcall(function() game:GetService("Players"):SetChatFilterUrl(url .. "/Game/ChatFilter.ashx") end)
 	
 	if gameCode then
 		game:SetVIPServerId(tostring(gameCode))
@@ -262,37 +259,37 @@ if url~=nil then
 	game:GetService("BadgeService"):SetPlaceId(placeId)
 
 	if newBadgeUrlEnabled then
-		game:GetService("BadgeService"):SetAwardBadgeUrl(apiProxyUrl .. "/assets/award-badge?userId=%d&badgeId=%d&placeId=%d")
+		game:GetService("BadgeService"):SetAwardBadgeUrl(url .. "/assets/award-badge?userId=%d&badgeId=%d&placeId=%d")
 	end
 
 	if access ~= nil then
 		if not newBadgeUrlEnabled then
-			game:GetService("BadgeService"):SetAwardBadgeUrl(assetGameUrl .. "/Game/Badge/AwardBadge.ashx?UserID=%d&BadgeID=%d&PlaceID=%d")
+			game:GetService("BadgeService"):SetAwardBadgeUrl(url .. "/Game/Badge/AwardBadge.ashx?UserID=%d&BadgeID=%d&PlaceID=%d")
 		end
 
-		game:GetService("BadgeService"):SetHasBadgeUrl(assetGameUrl .. "/Game/Badge/HasBadge.ashx?UserID=%d&BadgeID=%d")
-		game:GetService("BadgeService"):SetIsBadgeDisabledUrl(assetGameUrl .. "/Game/Badge/IsBadgeDisabled.ashx?BadgeID=%d&PlaceID=%d")
+		game:GetService("BadgeService"):SetHasBadgeUrl(url .. "/Game/Badge/HasBadge.ashx?UserID=%d&BadgeID=%d")
+		game:GetService("BadgeService"):SetIsBadgeDisabledUrl(url .. "/Game/Badge/IsBadgeDisabled.ashx?BadgeID=%d&PlaceID=%d")
 
-		game:GetService("FriendService"):SetMakeFriendUrl(assetGameUrl .. "/Game/CreateFriend?firstUserId=%d&secondUserId=%d")
-		game:GetService("FriendService"):SetBreakFriendUrl(assetGameUrl .. "/Game/BreakFriend?firstUserId=%d&secondUserId=%d")
-		game:GetService("FriendService"):SetGetFriendsUrl(assetGameUrl .. "/Game/AreFriends?userId=%d")
+		game:GetService("FriendService"):SetMakeFriendUrl(url .. "/Game/CreateFriend?firstUserId=%d&secondUserId=%d")
+		game:GetService("FriendService"):SetBreakFriendUrl(url .. "/Game/BreakFriend?firstUserId=%d&secondUserId=%d")
+		game:GetService("FriendService"):SetGetFriendsUrl(url .. "/Game/AreFriends?userId=%d")
 	end
 	game:GetService("BadgeService"):SetIsBadgeLegalUrl("")
-	game:GetService("InsertService"):SetBaseSetsUrl(assetGameUrl .. "/Game/Tools/InsertAsset.ashx?nsets=10&type=base")
-	game:GetService("InsertService"):SetUserSetsUrl(assetGameUrl .. "/Game/Tools/InsertAsset.ashx?nsets=20&type=user&userid=%d")
-	game:GetService("InsertService"):SetCollectionUrl(assetGameUrl .. "/Game/Tools/InsertAsset.ashx?sid=%d")
-	game:GetService("InsertService"):SetAssetUrl(assetGameUrl .. "/Asset/?id=%d")
-	game:GetService("InsertService"):SetAssetVersionUrl(assetGameUrl .. "/Asset/?assetversionid=%d")
+	game:GetService("InsertService"):SetBaseSetsUrl(url .. "/Game/Tools/InsertAsset.ashx?nsets=10&type=base")
+	game:GetService("InsertService"):SetUserSetsUrl(url .. "/Game/Tools/InsertAsset.ashx?nsets=20&type=user&userid=%d")
+	game:GetService("InsertService"):SetCollectionUrl(url .. "/Game/Tools/InsertAsset.ashx?sid=%d")
+	game:GetService("InsertService"):SetAssetUrl(url .. "/Asset/?id=%d")
+	game:GetService("InsertService"):SetAssetVersionUrl(url .. "/Asset/?assetversionid=%d")
 	
 	if gameCode then
-		pcall(function() loadfile(assetGameUrl .. "/Game/LoadPlaceInfo.ashx?PlaceId=" .. placeId .. "&gameCode=" .. tostring(gameCode))() end)
+		pcall(function() loadfile(url .. "/Game/LoadPlaceInfo.ashx?PlaceId=" .. placeId .. "&gameCode=" .. tostring(gameCode))() end)
 	else
-		pcall(function() loadfile(assetGameUrl .. "/Game/LoadPlaceInfo.ashx?PlaceId=" .. placeId)() end)
+		pcall(function() loadfile(url .. "/Game/LoadPlaceInfo.ashx?PlaceId=" .. placeId)() end)
 	end
 	
 	pcall(function() 
 				if access then
-					loadfile(assetGameUrl .. "/Game/PlaceSpecificScript.ashx?PlaceId=" .. placeId .. "&access=" .. access)()
+					loadfile(url .. "/Game/PlaceSpecificScript.ashx?PlaceId=" .. placeId .. "&access=" .. access)()
 				end
 			end)
 end
@@ -303,7 +300,7 @@ settings().Diagnostics.LuaRamLimit = 0
 game:GetService("Players").PlayerAdded:connect(function(player)
 	shouldCountDown = false
 	
-	if assetGameUrl and access and placeId and player and player.userId then
+	if url and access and placeId and player and player.userId then
 		print("Player " .. player.userId .. " added")
 		local userid = string.gsub(tostring(player.userId), "%-", "")
 		userid = string.gsub(tostring(player.userId), "-", "")
@@ -354,7 +351,7 @@ game:GetService("Players").PlayerAdded:connect(function(player)
 						end
 					end
                 end
-            end--]]
+            end
 			spawn(function()
 					waitForAccoutrement(character)
 					for _, accessory in ipairs(character:GetChildren()) do
@@ -382,7 +379,7 @@ game:GetService("Players").PlayerAdded:connect(function(player)
 						if testing then
 							warn(player.Name .. " passed validation")
 						end
-				end)
+				end)]]
 			
 			local starterPlayer = game:GetService("StarterPlayer")
 
@@ -432,7 +429,7 @@ game:GetService("Players").PlayerRemoving:connect(function(player)
 	local isTeleportingOut = "False"
 	if player.Teleported then isTeleportingOut = "True" end
 
-	if assetGameUrl and access and placeId and player and player.userId then
+	if url and access and placeId and player and player.userId then
 		print("Player " .. player.userId .. " leaving")	
 		if testing then
 			warn("Removing " .. player.Name .. " from database")
@@ -453,12 +450,12 @@ game:GetService("Players").PlayerRemoving:connect(function(player)
 end)
 
 local onlyCallGameLoadWhenInRccWithAccessKey = newBadgeUrlEnabled
-if placeId ~= nil and assetGameUrl ~= nil and ((not onlyCallGameLoadWhenInRccWithAccessKey) or access ~= nil) then
+if placeId ~= nil and url ~= nil and ((not onlyCallGameLoadWhenInRccWithAccessKey) or access ~= nil) then
 	-- yield so that file load happens in the heartbeat thread
 	wait()
 	
 	-- load the game
-	game:Load(assetGameUrl .. "/asset/?id=" .. placeId)
+	game:Load(url .. "/asset/?id=" .. placeId)
 end
 
 -- Now start the connection
